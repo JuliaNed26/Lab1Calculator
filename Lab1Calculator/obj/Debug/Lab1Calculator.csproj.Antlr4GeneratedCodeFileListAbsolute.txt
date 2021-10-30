@@ -1,0 +1,6 @@
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorLexer.cs
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorParser.cs
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorListener.cs
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorBaseListener.cs
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorVisitor.cs
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Calculator\obj\Debug\LabCalculatorBaseVisitor.cs

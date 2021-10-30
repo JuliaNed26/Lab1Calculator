@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Lab1Calculator.Table">
+    <Position X="3" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAADAAYAQAAAABECAAAAAAEAkAAAAAAAAgA=</HashCode>
+      <FileName>Table.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="cells" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Lab1Calculator.MyCell">
+    <Position X="0.5" Y="1" Width="1.5" />
+    <AssociationLine Name="CellsDependsOnMe" Type="Lab1Calculator.MyCell">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.369" Y="0.435" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="CellsIDependOn" Type="Lab1Calculator.MyCell">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.369" Y="0.404" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAFAAAQAAJAAAgAACAAAAAAAAAA=</HashCode>
+      <FileName>MyCell.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="CellsDependsOnMe" />
+      <Field Name="CellsIDependOn" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Lab1Calculator.Calculator">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Calculator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab1Calculator.Form1">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAIAAAAACAACAAAAACAxAADAAgAAAAAAgAABAAAAEA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab1Calculator.LabCalculatorVisitor">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AggQAAAAAAAAAiAABAAAAAAAAAAAAAAAIAIJIAAQGCA=</HashCode>
+      <FileName>LabCalculatorVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lab1Calculator.ThrowExceptionErrorListener" Collapsed="true">
+    <Position X="7.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ThrowExceptionErrorListener.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
