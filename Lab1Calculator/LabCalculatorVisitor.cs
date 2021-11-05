@@ -116,6 +116,10 @@ namespace Lab1Calculator
             }
             else //LabCalculatorLexer.DIVIDE
             {
+                if(right==0.0)
+                {
+                    throw new DivideByZeroException();
+                }
                 Debug.WriteLine("{0} / {1}", left, right);
                 return left / right;
             }

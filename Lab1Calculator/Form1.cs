@@ -15,6 +15,7 @@ namespace Lab1Calculator
     public partial class Form1 : Form
     {
         Table table;
+        Calculator calculator;
         uint row_count = 0;
         uint col_count = 0;
         public Form1()
@@ -28,6 +29,7 @@ namespace Lab1Calculator
             CreateDataGridView(size, size);//заповнюємо dataGridView1
             row_count += size;
             col_count += size;
+            calculator = new Calculator(ref table.cells_values);
             this.ActiveControl = dataGridView1;
         }
 
@@ -53,8 +55,8 @@ namespace Lab1Calculator
         private void add_row_btn_Click(object sender, EventArgs e)
         {
             DataGridViewRow new_row = new DataGridViewRow();
-            row_count++;
             new_row.HeaderCell.Value = row_count.ToString();
+            row_count++;
             table.AddRow();
             dataGridView1.Rows.Add(new_row);
         }
@@ -105,30 +107,39 @@ namespace Lab1Calculator
             expressionTb.Text = table.cells[cellName].Expr;
         }
 
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void ReevaluateCell(string cellName)//повертаємо минулі значення
+        {
+            if (table.cells[cellName].Expr != "")
+            {
+                table.cells[cellName].Value = calculator.Evaluate(table.cells[cellName].Expr);
+            }
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)// recursion error!
         {
             string cellName = table.GetCellName((uint)dataGridView1.CurrentCell.RowIndex, (uint)dataGridView1.CurrentCell.ColumnIndex);
             if (table.cells.ContainsKey(cellName))
             {
                 try
                 {
-                    string expr = dataGridView1.CurrentCell.Value.ToString();
-                    table.cells[cellName].Value = Calculator.Evaluate(expr, table.cells_values);//змінюємо значення комірки
-                    table.cells_values[cellName] = Convert.ToDouble(table.cells[cellName].Value);//оновлюємо значення для комірки 
-                                                                                                 //в cell_values
-                    table.cells[cellName].Expr = expr;
-                    table.cells[cellName].FillCellsIDependOn(ref table.cells);//заповнюємо список комірок, від яких залежить дана
+                    string expr = dataGridView1.CurrentCell.Value.ToString();//watch expression
+                    double value = calculator.Evaluate(expr);//try to calculate it
+                    table.cells[cellName].SetExpression(expr, table.cells);//save expression
+                    table.SetCellValue(cellName, value);//save value to cell
                     dataGridView1.CurrentCell.Value = table.cells[cellName].Value;//виводимо значення в dataGridView1
                     RefreshDependentCells(table.cells[cellName]);//оновлюємо значення комірок,що залежать від даної
                 }
                 catch (ArgumentException ex)//виключення,що можуть виникнути,якщо вираз неправильний
                 {
-                    if (table.cells[cellName].Expr != "")//повертаємо минулі значення
-                    {
-                        table.cells[cellName].Value = Calculator.Evaluate(table.cells[cellName].Expr, table.cells_values);
-                    }
+                    ReevaluateCell(cellName);//повертаємо минулі значення
                     dataGridView1.CurrentCell.Value = table.cells[cellName].Value;
                     MessageBox.Show(ex.Message);
+                }
+                catch (DivideByZeroException)
+                {
+                    ReevaluateCell(cellName);//повертаємо минулі значення
+                    dataGridView1.CurrentCell.Value = table.cells[cellName].Value;
+                    MessageBox.Show("Division by zero!");
                 }
             }
         }
@@ -136,9 +147,9 @@ namespace Lab1Calculator
         {
             foreach (var cur_cell in cell.CellsDependsOnMe)
             {
-                cur_cell.Value = Calculator.Evaluate(cur_cell.Expr, table.cells_values);
+                cur_cell.Value = calculator.Evaluate(cur_cell.Expr);
+                table.cells_values[cur_cell.Name] = Convert.ToDouble(cur_cell.Value);//оновлюємо значення комірки в таблиці
                 RefreshDependentCells(cur_cell);
-                table.cells_values[cur_cell.Name] = Convert.ToDouble(cur_cell.Value);
                 dataGridView1[(int)cur_cell.Column, (int)cur_cell.Row].Value = cur_cell.Value;
             }
         }
@@ -163,7 +174,23 @@ namespace Lab1Calculator
                     writer.WriteLine("Columns: " + col_count + " Rows: " + row_count);
                     foreach (var cell in table.cells_values)
                     {
-                        writer.WriteLine(cell.Key + " = " + cell.Value.ToString() + " Expression: " + table.cells[cell.Key].Expr);
+                        if (table.cells[cell.Key].Expr != "")//показувати лише заповнені комірки
+                        {
+                            writer.Write(cell.Key + " = ");
+                            if (cell.Value == double.PositiveInfinity)
+                            {
+                                writer.Write("PositiveInfinity");
+                            }
+                            else if (cell.Value == double.NegativeInfinity)
+                            {
+                                writer.Write("NegativeInfinity");
+                            }
+                            else
+                            {
+                                writer.Write(cell.Value);
+                            }
+                            writer.Write(" Expression: " + table.cells[cell.Key].Expr + '\n');
+                        }
                     }
                 }
             }
@@ -177,11 +204,23 @@ namespace Lab1Calculator
         {
             Regex cellNameRegex = new Regex(@"[A-Z]+[0-9]+");
             string cellName = cellNameRegex.Matches(cellInfo)[0].ToString();
-            Regex valueRegex = new Regex(@"\d+\.?\d*");
-            double value = Convert.ToDouble(valueRegex.Matches(cellInfo)[1].ToString()); 
+            double value = 0;
+            if (cellInfo.Contains("NegativeInfinity"))
+            {
+                value = double.NegativeInfinity;
+            }
+            else if (cellInfo.Contains("PositiveInfinity"))
+            {
+                value = double.PositiveInfinity;
+            }
+            else
+            {
+                Regex valueRegex = new Regex(@"\d+\.?\d*");
+                value = Convert.ToDouble(valueRegex.Matches(cellInfo)[1].ToString());
+            }
             string expression = cellInfo.Substring(cellInfo.LastIndexOf(": ") + 2,
                  cellInfo.Length - cellInfo.LastIndexOf(": ") - 2);
-            table.cells[cellName].Expr = expression;
+            table.cells[cellName].SetExpression(expression, table.cells);
             table.cells[cellName].Value = value;
             table.cells_values[cellName] = value;
             if (expression != "")

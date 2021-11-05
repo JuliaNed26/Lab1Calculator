@@ -16,10 +16,10 @@ namespace Lab1Tests
         [TestMethod]
         public void SetExprTest()
         {
-            MyCell A0 = new MyCell("A0", 0, 0);
+            Table table = new Table(1, 2);
             try
             {
-                A0.Expr = "A0*2";
+                table.cells["A0"].SetExpression("A0*2", table.cells);
                 Assert.Fail();
             }
             catch (ArgumentException ex)
@@ -29,32 +29,23 @@ namespace Lab1Tests
                     Assert.Fail();
                 }
             }
-            A0.Expr = "3*3";
-            Assert.AreEqual("3*3", A0.Expr);
-        }
+            table.cells["A0"].SetExpression("3*3", table.cells);
+            Assert.AreEqual("3*3", table.cells["A0"].Expr);
+            table.cells["A0"].SetExpression("B0 + 1", table.cells);
+            Assert.AreEqual("B0 + 1", table.cells["A0"].Expr);
+            try
+            {
+                table.cells["B0"].SetExpression("A0*2", table.cells);
+                Assert.Fail();
+            }
+            catch (ArgumentException ex)
+            {
+                if (ex.Message != "Recursion occured!")
+                {
+                    Assert.Fail();
+                }
+            }
 
-        [TestMethod]
-        public void FillCellsIDependOnTest()
-        {
-            Dictionary<string, MyCell> test_cells = new Dictionary<string, MyCell>();
-            MyCell A0 = new MyCell("A0", 0, 0);
-            MyCell A1 = new MyCell("A1", 1, 0);
-            test_cells.Add("A0", A0);
-            test_cells.Add("A1", A1);
-            A0.Expr = "incA1";
-            A0.FillCellsIDependOn(ref test_cells);
-            Assert.AreEqual(0, A1.CellsIDependOn.Count);
-            Assert.IsTrue(A0.CellsIDependOn.Contains(A1));
-            Assert.AreEqual(1, A0.CellsIDependOn.Count);
-            Assert.AreEqual(1, A1.CellsDependsOnMe.Count);
-            A0.Expr = "";
-            A0.FillCellsIDependOn(ref test_cells);
-            A1.Expr = "incA0";
-            A1.FillCellsIDependOn(ref test_cells);
-            Assert.AreEqual(0, A0.CellsIDependOn.Count);
-            Assert.IsTrue(A1.CellsIDependOn.Contains(A0));
-            Assert.AreEqual(1, A1.CellsIDependOn.Count);
-            Assert.AreEqual(1, A0.CellsDependsOnMe.Count);
         }
     }
 }

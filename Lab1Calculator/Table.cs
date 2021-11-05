@@ -129,5 +129,33 @@ namespace Lab1Calculator
             }
             return false;
         }
+
+        public bool SetCellValue(string cellName, double value)
+        {
+            if(!cells.ContainsKey(cellName))
+            {
+                return false;
+            }
+            RefreshDependencies(cells[cellName]);
+            cells[cellName].Value = value;
+            cells_values[cellName] = value;
+            return true;
+        }
+
+        private void RefreshDependencies(MyCell changedCell)
+        {
+            foreach(var cell in cells)
+            {
+                if(!changedCell.CellsIDependOn.Contains(cell.Value) &&
+                    cell.Value.CellsDependsOnMe.Contains(changedCell))
+                {
+                    cell.Value.CellsDependsOnMe.Remove(changedCell);
+                }
+            }
+            foreach(var cell in changedCell.CellsIDependOn)
+            {
+                cell.CellsDependsOnMe.Add(changedCell);
+            }
+        }
     }
 }

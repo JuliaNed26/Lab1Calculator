@@ -16,3 +16,4 @@ C:\Users\nedav\source\repos\Lab1Calculator\Lab1Tests\obj\Debug\Lab1Tests.csproj.
 C:\Users\nedav\source\repos\Lab1Calculator\Lab1Tests\obj\Debug\Lab1Tests.csproj.CoreCompileInputs.cache
 C:\Users\nedav\source\repos\Lab1Calculator\Lab1Tests\obj\Debug\Lab1Tests.dll
 C:\Users\nedav\source\repos\Lab1Calculator\Lab1Tests\obj\Debug\Lab1Tests.pdb
+C:\Users\nedav\source\repos\Lab1Calculator\Lab1Tests\obj\Debug\Lab1Tests.csproj.CopyComplete

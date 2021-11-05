@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace Lab1Calculator
 {
-    public static class Calculator
+    public class Calculator
     {
-        public static double Evaluate(string expression, Dictionary<string, double> identValues)
+        Dictionary<string, double> ident_values;
+        public Calculator(ref Dictionary<string,double> _ident_values)
+        {
+            ident_values = new Dictionary<string, double>();
+            ident_values = _ident_values;
+        }
+        public double Evaluate(string expression)
         {
             var lexer = new LabCalculatorLexer(new AntlrInputStream(expression));//lexer is reading from a string expression
             lexer.RemoveErrorListeners();
@@ -18,7 +24,7 @@ namespace Lab1Calculator
             var parser = new LabCalculatorParser(tokens);
             var tree = parser.compileUnit();
             var visitor = new LabCalculatorVisitor();
-            visitor.SetIdentifierTable(identValues);
+            visitor.SetIdentifierTable(ident_values);
             return visitor.Visit(tree);
         }
     }

@@ -86,9 +86,8 @@ namespace Lab1Tests
             Assert.AreEqual(true, emptyTable.RemoveRow());
             Assert.AreEqual((uint)1, emptyTable.RowCount);
             emptyTable.AddRow();
-            emptyTable.cells["A0"].Expr = "incA1";
-            emptyTable.cells["A0"].Value = 1;
-            emptyTable.cells["A0"].FillCellsIDependOn(ref emptyTable.cells);
+            emptyTable.cells["A0"].SetExpression("incA1", emptyTable.cells);
+            emptyTable.SetCellValue("A0", 1);
             try
             {
                 emptyTable.RemoveRow();
@@ -110,9 +109,8 @@ namespace Lab1Tests
             Assert.AreEqual(true, emptyTable.RemoveColumn());
             Assert.AreEqual((uint)1, emptyTable.ColCount);
             emptyTable.AddColumn();
-            emptyTable.cells["A0"].Expr = "incB0";
-            emptyTable.cells["A0"].Value = 1;
-            emptyTable.cells["A0"].FillCellsIDependOn(ref emptyTable.cells);
+            emptyTable.cells["A0"].SetExpression("incB0", emptyTable.cells);
+            emptyTable.SetCellValue("A0", 1);
             try
             {
                 emptyTable.RemoveColumn();
